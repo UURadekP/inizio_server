@@ -1,0 +1,5 @@
+- name: Create web user
+  user:
+    name: "{{ web_user }}"
+    state: present
+    shell: /bin/bash

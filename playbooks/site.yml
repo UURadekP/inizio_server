@@ -1,0 +1,22 @@
+- hosts: webservers
+  become: yes
+
+  roles:
+    - user
+    - nginx
+    - firewall
+    - ssh-hardening
+    - security_updates
+    - fail2ban
+
+  tasks:
+    - name: Validate that the HTTP service is running
+      uri:
+        url: "http://loalhost/"
+        return_content: yes
+      register: result
+
+    - name: Page contains string
+      assert:
+        that:
+          - "'Welcome to the website' in result.content"

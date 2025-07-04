@@ -1,0 +1,45 @@
+- name: Install NGINX
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Delete default config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Add custom config
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/webapp.conf
+  notify: Reload nginx
+
+- name: Enable site config
+  file:
+    src: /etc/nginx/sites-available/webapp.conf
+    dest: /etc/nginx/sites-enabled/webapp.conf
+    state: link
+  notify: Reload nginx
+
+- name: Create web root dir
+  file:
+    path: "{{ web_root }}"
+    state: directory
+    owner: "{{ web_user }}"
+    group: "{{ web_user }}"
+    mode: '0755'
+
+- name: Deploy index.html template
+  template:
+    src: index.html.j2
+    dest: "{{ web_root }}/index.html"
+    owner: "{{ web_user }}"
+    group: "{{ web_user }}"
+    mode: '0644'
+
+- name: NGINX run check
+  service:
+    name: nginx
+    state: enabled
+    enabled: yes

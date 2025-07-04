@@ -1,0 +1,21 @@
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Allow SSH and HTTP ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  loop: "{{ firewall_allowed_ports }}"
+
+- name: Stop other connections
+  ufw:
+    default: deny
+    direction: incoming
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+    logging: 'on'
