@@ -15,7 +15,7 @@
     dest: /etc/nginx/sites-available/webapp.conf
     owner: root
     group: root
-    mode: "0644'
+    mode: "0644"
   notify: Reload nginx
   vars:
     nginx_port: 80
