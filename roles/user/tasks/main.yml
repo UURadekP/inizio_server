@@ -1,5 +1,6 @@
 - name: Create web user
-  user:
-    name: "{{ web_user }}"
-    state: present
+  ansible.builtin.user:
+    name: webapp
     shell: /bin/bash
+    groups: sudo
+  become: yes

@@ -14,6 +14,8 @@
     src: nginx.conf.j2
     dest: /etc/nginx/sites-available/webapp.conf
   notify: Reload nginx
+  vars:
+    nginx_port: 80
 
 - name: Enable site config
   file:
@@ -24,22 +26,22 @@
 
 - name: Create web root dir
   file:
-    path: "{{ web_root }}"
+    path: /opt/static-sites
     state: directory
-    owner: "{{ web_user }}"
-    group: "{{ web_user }}"
+    owner: webapp
+    group: webapp
     mode: '0755'
 
 - name: Deploy index.html template
   template:
     src: index.html.j2
-    dest: "{{ web_root }}/index.html"
-    owner: "{{ web_user }}"
-    group: "{{ web_user }}"
+    dest: /opt/static-sites/index.html
+    owner: webapp
+    group: webapp
     mode: '0644'
 
-- name: NGINX run check
+- name: Nginx run check
   service:
     name: nginx
-    state: enabled
+    state: started
     enabled: yes

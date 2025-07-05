@@ -1,9 +1,16 @@
-server {
-	listen {{ nginx_port }};
-	server_name _;
+user webapp;
+pid /run/nginx.pid;
 
-	root {{ web_root }};
+http {
+    server {
+	listen {{ nginx_port }};
+	server_name localhost;
+
+	root /opt/static-sites;
 	index index.html;
 
-	location / { try_files $uri $uri/ =404; }
+	location / {
+		try_files $uri $uri/ =404;
+		}
+	}
 }

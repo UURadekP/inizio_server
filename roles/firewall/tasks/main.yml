@@ -4,11 +4,15 @@
     state: present
     update_cache: yes
 
-- name: Allow SSH and HTTP ports
+- name: Allow SSH
   ufw:
     rule: allow
-    port: "{{ item }}"
-  loop: "{{ firewall_allowed_ports }}"
+    port: 22
+
+- name: Allow HTTP
+  ufw:
+    rule: allow
+    port: 80
 
 - name: Stop other connections
   ufw:

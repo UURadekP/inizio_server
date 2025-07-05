@@ -1,6 +1,7 @@
 - hosts: webservers
   become: yes
 
+
   roles:
     - user
     - nginx
@@ -10,9 +11,12 @@
     - fail2ban
 
   tasks:
+    - name: Debug
+      debug:
+        var: web_user
     - name: Validate that the HTTP service is running
       uri:
-        url: "http://loalhost/"
+        url: "http://localhost:80/"
         return_content: yes
       register: result
 
