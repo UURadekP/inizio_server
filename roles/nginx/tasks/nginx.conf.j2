@@ -1,7 +1,4 @@
-user webapp;
-pid /run/nginx.pid;
 
-http {
     server {
 	listen {{ nginx_port }};
 	server_name localhost;
@@ -13,4 +10,4 @@ http {
 		try_files $uri $uri/ =404;
 		}
 	}
-}
+
