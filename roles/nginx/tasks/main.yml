@@ -27,7 +27,6 @@
     dest: /etc/nginx/sites-enabled/webapp.conf
     state: link
     force: yes
-  notify: Reload nginx
 
 - name: Create web root dir
   file:
@@ -45,11 +44,11 @@
     group: webapp
     mode: '0644'
 
-- name: Reload nginx
-  become: yes
-  service:
-    name: nginx
-    state: reloaded
+- name: Edit nginx config
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    regexp: '^user'
+    line: 'user webapp'
 
 - name: Nginx run check
   service:

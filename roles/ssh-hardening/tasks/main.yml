@@ -1,19 +1,32 @@
 - name: Disable root login
   lineinfile:
     path: /etc/ssh/sshd_config
-    regexp: '^PermitRootLogin'
+    regexp: '^#?PermitRootLogin'
     line: 'PermitRootLogin no'
     state: present
+  notify: Restart SSH
 
 - name: Disable password auth
   lineinfile:
     path: /etc/ssh/sshd_config
-    regexp: '^PasswordAuthentication'
+    regexp: '^#?PasswordAuthentication'
     line: 'PasswordAuthentication no'
     state: present
+  notify: Restart SSH
 
-- name: Restart SSH service
-  service:
-    name: ssh
-    state: restarted
-  when: ssh_config_changed | default(false)
+- name: SSH key login allow
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PubkeyAuthentication'
+    line: 'PubkeyAuthentication yes'
+    state: present
+  notify: Restart SSH
+
+- name: Challenge response disable
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?ChallengeResponseAuthentication'
+    line: 'ChallengeResponseAuthentication no'
+    state: present
+    create: yes
+  notify: Restart SSH
